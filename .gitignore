@@ -1,0 +1,5 @@
+.venv/
+.venvWsl/
+.buildozer/
+__pycache__/
+models/*
