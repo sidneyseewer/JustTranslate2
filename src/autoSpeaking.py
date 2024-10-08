@@ -1,12 +1,12 @@
 import subprocess
 import os
-import simpleaudio as sa
+# import simpleaudio as sa
 
 def _generate_wav(text, lan):
     voices = os.listdir(os.path.join("voices",lan))
     onnx_files = [file for file in voices if file.endswith(".onnx")]
     voice = onnx_files[0]
-    wav_filename = "test.wav"
+    wav_filename = os.path.join("translations", lan, clean_string(text)+".wav")
     # Prepare the command to generate the wav file
     command = f'echo {text} | .\\piper\\piper.exe -m .\\voices\\{lan}\\{voice} -f {wav_filename}'
 
@@ -22,13 +22,14 @@ def _generate_wav(text, lan):
         return None
 
 def _play_sound(wav_filename):
+    pass
     # Load the .wav file
-    wave_obj = sa.WaveObject.from_wave_file(wave_file=wav_filename)
+    # wave_obj = sa.WaveObject.from_wave_file(wave_file=wav_filename)
     # Play the sound
-    play_obj = wave_obj.play()
+    # play_obj = wave_obj.play()
     # Wait for the sound to finish playing
-    play_obj.wait_done()
-    os.remove(wav_filename)
+    # play_obj.wait_done()
+    # os.remove(wav_filename)
 
 def speak_text(text, lan):    
     # Generate the wav file
@@ -47,6 +48,18 @@ def test_languages():
     ]
     for test in test_array:
         speak_text(text=test[1],lan=test[0])
+
+def clean_string(input_string):
+    # Remove special characters by iterating through the string and keeping only alphanumeric characters and spaces
+    cleaned_string = ''.join(char for char in input_string if char.isalnum() or char.isspace())
+    
+    # Convert to lowercase
+    cleaned_string = cleaned_string.lower()
+    
+    # Replace spaces with underscores
+    cleaned_string = cleaned_string.replace(' ', '_')
+    
+    return cleaned_string
 
 
 if __name__ == "__main__":
